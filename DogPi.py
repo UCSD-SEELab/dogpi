@@ -20,6 +20,8 @@ class DogPi:
 
         # Initialize directional pipe between image processor and motor control
         conn_in, conn_out = Pipe(duplex=False)
+        # duplex / one way communication
+
 
         # Initialize image processing
         self.p_vision = ImageProcessor(conn_out=conn_out)

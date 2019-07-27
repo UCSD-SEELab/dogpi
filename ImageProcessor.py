@@ -45,14 +45,11 @@ class ImageProcessor(Process):
         Returns boolean for if vision system is ready for movement
         """
         # TODO Confirm that vision system is ready to stream to motor process
-        # p.vision conn_out
-        # duplex= True?
         return self.b_streaming
 
     def send_turn_cmd(self, direction):
         """
         Send a turn command to the motor control through the pipe to turn DogPi's wheels in a desired direction
-        This will come from the function run where the video streaming and functionalitty of image processing?
         INPUT
             direction:
         """
@@ -76,7 +73,6 @@ class ImageProcessor(Process):
             print('ImageProcessor->send_move_cmd  {0}'.format(msg))
         else:
             # TODO Raise an error
-            # raise Exception ('ERROR: ImageProcessor->send_move_cmd pipe connection invalid.'.format(msg))
             print('ERROR: ImageProcessor->send_move_cmd pipe connection invalid.')
 
     def distance_to_camara(size_ball, focal_length, width_pixels):
@@ -89,8 +85,6 @@ class ImageProcessor(Process):
         """
 
         # TODO Put in functionality for video streaming and processing here!
-        # if debug
-
         # construct the argument parse and parse the arguments
         ap = argparse.ArgumentParser()
         ap.add_argument("-v", "--video",
@@ -196,9 +190,11 @@ class ImageProcessor(Process):
 
                     # call functions to turn left or right
                     if center[1] >= half:
-                        turn_left()
+                        turn_left
+                        direction = 'Left'
                     else:
-                        turn_right()
+                        turn_right
+                        directioon = 'Right'
             # else:
             # stop()
 
@@ -266,8 +262,6 @@ class ImageProcessor(Process):
         else:
             vs.release()
 
-        # if debug
-        # cv2.destroyAllWindows()
         time.sleep(5)
 
         # TODO Once we know that the camera is streaming properly...
