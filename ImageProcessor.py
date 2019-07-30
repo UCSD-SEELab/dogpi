@@ -62,7 +62,6 @@ class ImageProcessor(Process):
         INPUT
             direction:
         """
-        direction = direction
         if self.check_conn_valid():
             msg = {'cmd':'turn', 'dir':direction}
             self.conn_out.send(msg)
@@ -198,12 +197,12 @@ class ImageProcessor(Process):
                     # call functions to turn left or right
                     if center[1] >= half:
                         turn_left
-                        direction = 'Left'
-                        send_turn_cmd(direction)
+                        # direction = 'Left'
+                        direction = -20
                     else:
                         turn_right
-                        direction = 'Right'
-                        send_turn_cmd(direction)
+                        # direction = 'Right'
+                        direction = 20
             # else:
             # stop()
 
@@ -280,11 +279,11 @@ class ImageProcessor(Process):
 
         while not (self.b_stopping):
             time.sleep(2)
-            self.send_turn_cmd(-20)
+            self.send_turn_cmd(direction)
             time.sleep(2)
             self.send_move_cmd(1)
             time.sleep(2)
-            self.send_turn_cmd(20)
+            self.send_turn_cmd(direction)
             time.sleep(2)
             self.send_move_cmd(-1)
 
