@@ -11,7 +11,7 @@ from multiprocessing import Process
 turn_right = 20
 turn_left = 20
 forward = 40
-stop = 0 
+stop = 0
 
 
 def distance_to_camara(size_ball, focal_length, width_pixels):
@@ -184,9 +184,9 @@ class ImageProcessor(Process):
                     distance = distance_to_camara(size_ball, focal_length, width_pixels)
 
                     if distance > 40:
-                        forward()
+                        forward
                     else:
-                        stop()
+                        stop
 
                     # draw circle and centroid / update list of tracked points
                     cv2.circle(frame, (int(x), int(y)), int(radius),
