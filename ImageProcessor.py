@@ -196,12 +196,12 @@ class ImageProcessor(Process):
 
                     # call functions to turn left or right
                     if center[1] >= half:
-                        turn_left = -10
-                        direction = 'Left'
+                        turn_left = -20
+                        # direction = 'Left'
                         self.send_turn_cmd(turn_left)
                     else:
-                        turn_right = +10
-                        direction = 'Right'
+                        turn_right = +20
+                        # direction = 'Right'
                         self.send_turn_cmd(turn_right)
 
             # else:
@@ -264,6 +264,8 @@ class ImageProcessor(Process):
         else:
             vs.release()
 
+        cv2.DestroyAllWindows()
+
         time.sleep(5)
 
         # TODO Once we know that the camera is streaming properly...
@@ -271,11 +273,11 @@ class ImageProcessor(Process):
 
         while not (self.b_stopping):
             time.sleep(2)
-            self.send_turn_cmd(turn_left)
+            # self.send_turn_cmd(turn_left)
             time.sleep(2)
             self.send_move_cmd(1)
             time.sleep(2)
-            self.send_turn_cmd(turn_right)
+            # self.send_turn_cmd(turn_right)
             time.sleep(2)
             self.send_move_cmd(-1)
 
