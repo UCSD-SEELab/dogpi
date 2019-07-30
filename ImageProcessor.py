@@ -197,9 +197,11 @@ class ImageProcessor(Process):
                     if center[1] >= half:
                         turn_left
                         direction = 'Left'
+                        send_move_cmd(direction)
                     else:
                         turn_right
-                        directioon = 'Right'
+                        direction = 'Right'
+                        send_move_cmd(direction)
             # else:
             # stop()
 
