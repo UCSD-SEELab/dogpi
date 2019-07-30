@@ -198,9 +198,11 @@ class ImageProcessor(Process):
                     if center[1] >= half:
                         turn_left = -10
                         direction = 'Left'
+                        self.send_turn_cmd(turn_left)
                     else:
                         turn_right = +10
                         direction = 'Right'
+                        self.send_turn_cmd(turn_right)
 
             # else:
             # stop()
