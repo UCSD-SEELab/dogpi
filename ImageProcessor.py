@@ -196,12 +196,12 @@ class ImageProcessor(Process):
 
                     # call functions to turn left or right
                     if center[1] >= half:
-                        turn_left
+                        turn_left = -10
                         direction = 'Left'
                     else:
-                        turn_right
-                        # direction = 'Right'
-                        direction = 20
+                        turn_right = +10
+                        direction = 'Right'
+
             # else:
             # stop()
 
@@ -250,9 +250,9 @@ class ImageProcessor(Process):
             # if the 'q' key is pressed, stop the loop
             cv2.imshow('Frame', frame)
             counter += 1
-            # key = cv2.waitKey(1) & 0xFF
-            # if key == ord("q"):
-                # break
+            key = cv2.waitKey(1) & 0xFF
+            if key == ord("q"):
+                break
 
         # if we are not using a video file, stop the camera video stream
         if not args.get("video", False):
