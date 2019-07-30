@@ -197,8 +197,7 @@ class ImageProcessor(Process):
                     # call functions to turn left or right
                     if center[1] >= half:
                         turn_left
-                        # direction = 'Left'
-                        direction = -20
+                        direction = 'Left'
                     else:
                         turn_right
                         # direction = 'Right'
@@ -250,11 +249,11 @@ class ImageProcessor(Process):
 
             # show the movement deltas and the direction of movement on
             # the frame
-            cv2.putText(frame, direction, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
-                        0.65, (255, 255, 255), 3)
-            cv2.putText(frame, "dx: {}, dy: {}".format(dX, dY),
-                        (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,
-                        0.35, (255, 255, 255), 1)
+            # cv2.putText(frame, direction, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
+                        # 0.65, (255, 255, 255), 3)
+            # cv2.putText(frame, "dx: {}, dy: {}".format(dX, dY),
+                        # (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,
+                        # 0.35, (255, 255, 255), 1)
 
 
             # if the 'q' key is pressed, stop the loop
@@ -283,7 +282,7 @@ class ImageProcessor(Process):
             time.sleep(2)
             self.send_move_cmd(1)
             time.sleep(2)
-            self.send_turn_cmd(direction)
+            self.send_turn_cmd(20)
             time.sleep(2)
             self.send_move_cmd(-1)
 
