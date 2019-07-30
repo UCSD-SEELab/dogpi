@@ -269,11 +269,11 @@ class ImageProcessor(Process):
 
         while not (self.b_stopping):
             time.sleep(2)
-            self.send_turn_cmd(direction)
+            self.send_turn_cmd(turn_left)
             time.sleep(2)
             self.send_move_cmd(1)
             time.sleep(2)
-            self.send_turn_cmd(20)
+            self.send_turn_cmd(turn_right)
             time.sleep(2)
             self.send_move_cmd(-1)
 
