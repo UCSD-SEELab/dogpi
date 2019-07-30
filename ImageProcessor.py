@@ -8,7 +8,7 @@ import imutils
 
 from multiprocessing import Process
 
-turn_right = 20
+turn_right = -20
 turn_left = 20
 forward = 40
 stop = 0
@@ -250,9 +250,9 @@ class ImageProcessor(Process):
             # if the 'q' key is pressed, stop the loop
             cv2.imshow('Frame', frame)
             counter += 1
-            key = cv2.waitKey(1) & 0xFF
-            if key == ord("q"):
-                break
+            # key = cv2.waitKey(1) & 0xFF
+            # if key == ord("q"):
+                # break
 
         # if we are not using a video file, stop the camera video stream
         if not args.get("video", False):
