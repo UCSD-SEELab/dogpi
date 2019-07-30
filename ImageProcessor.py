@@ -9,12 +9,15 @@ import imutils
 from multiprocessing import Process
 
 turn_right = 20
-turn_left =20
+turn_left = 20
+forward = 40
+stop = 0 
 
 
 def distance_to_camara(size_ball, focal_length, width_pixels):
     distance = ((size_ball * focal_length) / width_pixels)
     return distance
+
 
 class ImageProcessor(Process):
     """
@@ -250,9 +253,10 @@ class ImageProcessor(Process):
                         (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,
                         0.35, (255, 255, 255), 1)
 
-            counter += 1
 
             # if the 'q' key is pressed, stop the loop
+            cv2.imshow('Frame', frame)
+            counter += 1
             key = cv2.waitKey(1) & 0xFF
             if key == ord("q"):
                 break
