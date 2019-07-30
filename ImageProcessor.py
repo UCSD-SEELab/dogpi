@@ -11,6 +11,11 @@ from multiprocessing import Process
 turn_right = 20
 turn_left =20
 
+
+def distance_to_camara(size_ball, focal_length, width_pixels):
+    distance = ((size_ball * focal_length) / width_pixels)
+    return distance
+
 class ImageProcessor(Process):
     """
     desc
@@ -75,9 +80,6 @@ class ImageProcessor(Process):
             # TODO Raise an error
             print('ERROR: ImageProcessor->send_move_cmd pipe connection invalid.')
 
-    def distance_to_camara(size_ball, focal_length, width_pixels):
-        distance = ((size_ball * focal_length) / width_pixels)
-        return distance
 
     def run(self):
         """
