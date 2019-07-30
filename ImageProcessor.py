@@ -251,6 +251,7 @@ class ImageProcessor(Process):
             counter += 1
 
             # if the 'q' key is pressed, stop the loop
+            key = cv2.waitKey(1) & 0xFF
             if key == ord("q"):
                 break
 
