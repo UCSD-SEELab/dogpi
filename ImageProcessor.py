@@ -247,15 +247,6 @@ class ImageProcessor(Process):
                 thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
                 cv2.line(frame, pts[i - 1], pts[i], (0, 0, 255), thickness)
 
-            # show the movement deltas and the direction of movement on
-            # the frame
-            # cv2.putText(frame, direction, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
-                        # 0.65, (255, 255, 255), 3)
-            # cv2.putText(frame, "dx: {}, dy: {}".format(dX, dY),
-                        # (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,
-                        # 0.35, (255, 255, 255), 1)
-
-
             # if the 'q' key is pressed, stop the loop
             cv2.imshow('Frame', frame)
             counter += 1
