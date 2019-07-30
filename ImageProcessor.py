@@ -12,6 +12,7 @@ turn_right = 20
 turn_left = 20
 forward = 40
 stop = 0
+direction =''
 
 
 def distance_to_camara(size_ball, focal_length, width_pixels):
@@ -61,6 +62,7 @@ class ImageProcessor(Process):
         INPUT
             direction:
         """
+        direction = direction
         if self.check_conn_valid():
             msg = {'cmd':'turn', 'dir':direction}
             self.conn_out.send(msg)
@@ -197,11 +199,11 @@ class ImageProcessor(Process):
                     if center[1] >= half:
                         turn_left
                         direction = 'Left'
-                        send_move_cmd(direction)
+                        send_turn_cmd(direction)
                     else:
                         turn_right
                         direction = 'Right'
-                        send_move_cmd(direction)
+                        send_turn_cmd(direction)
             # else:
             # stop()
 
