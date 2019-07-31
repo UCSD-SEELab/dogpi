@@ -1,6 +1,27 @@
 import time
+import motor
 
 from multiprocessing import Process
+
+"""
+global forward0, forward1, backward1, backward0
+global pwm 
+speed
+motor 0 
+motor 1
+
+with speed spd  
+motor0(forward0)
+motor1(forward1)
+
+motor0(backward0)
+motor1(backward1)
+
+busnum 
+GPIO.BOARD (physical location)
+
+"""
+
 
 class MotorController(Process):
     """
@@ -34,6 +55,7 @@ class MotorController(Process):
         Description of function
         """
         print('MotorController: movement set to {0}'.format(speed))
+        motor.forward_with_speed(speed)
 
     def turn(self, angle):
         """
@@ -52,12 +74,14 @@ class MotorController(Process):
             return
 
         # Receive message
+        # msg = {'cmd':'move', 'dir':direction}
         msg_in = self.conn_in.recv()
         print('MotorController->rx_cmd  {0}'.format(msg_in))
 
         # Parse the message
         if 'cmd' in msg_in:
             if (msg_in['cmd'] == 'move') and ('direction' in msg_in):
+                # este speed de donde sale?
                 speed = int(msg_in['direction'])
                 if speed:
                     self.move(speed)
@@ -70,6 +94,8 @@ class MotorController(Process):
                 else:
                     print('ERROR: MotorController->rx_cmd  Invalid angle value')
 
+
+            # no entiendo esta parte por que solo hay cmd de move y turn
             elif msg_in['cmd'] == 'stop':
                 self.move(speed=0)
 
@@ -89,8 +115,17 @@ class MotorController(Process):
         """
         desc
         """
-        while not(self.b_stopping):
+
+        motor.setup()
+        motor.setSpeed(20)
+        while (True)
             self.rx_cmd()
+
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord("q"):
+            break
+
+
 
         # Once the loop is stopped, ensure all motors are off and wheels are turned to center
         self.move(speed=0)

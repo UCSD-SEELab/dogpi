@@ -73,11 +73,18 @@ class ImageProcessor(Process):
     def send_move_cmd(self, direction):
         """
         Send a move command to the motor control through the pipe to move DogPi forwards, backwards, or stop
+        self.send_move_cmd(forward)
+        self.send_move_cmd(stop)
+        forward = 0
+        stop = 0
+
         INPUT
-            direction:
+            direction :
+        direction forward +10 / stop 0
+        dir =/ direction in motor controller
         """
         if self.check_conn_valid():
-            msg = {'cmd':'move', 'dir':direction}
+            msg = {'cmd':'move', 'direction':direction}
             self.conn_out.send(msg)
             print('ImageProcessor->send_move_cmd  {0}'.format(msg))
         else:
@@ -187,7 +194,7 @@ class ImageProcessor(Process):
                     if distance > 50:
                         forward = +10
                         self.send_move_cmd(forward)
-
+                        # direction
                     else:
                         stop = 0
                         self.send_move_cmd(stop)
