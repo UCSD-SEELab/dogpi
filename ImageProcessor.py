@@ -274,6 +274,7 @@ class ImageProcessor(Process):
         self.b_streaming = True
 
         while not (self.b_stopping):
+            pass
             # time.sleep(2)
             # self.send_turn_cmd(turn_left)
             # time.sleep(2)
