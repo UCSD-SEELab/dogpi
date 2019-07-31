@@ -178,7 +178,7 @@ class ImageProcessor(Process):
 
                     # focal length
                     # focal_length = (width_pixels * known_distance) / size_ball
-                    focal_length = 465.95
+                    focal_length = 1054
 
                     # find the distance
                     # distance = ((size_ball * focal_length) / width_pixels)
