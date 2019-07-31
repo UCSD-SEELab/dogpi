@@ -186,10 +186,10 @@ class ImageProcessor(Process):
 
                     if distance > 40:
                         forward = +10
-                        send_move_cmd(forward)
+                        self.send_move_cmd(forward)
                     else:
                         stop = 0
-                        send_move_cmd(stop)
+                        self.send_move_cmd(stop)
 
                     # draw circle and centroid / update list of tracked points
                     cv2.circle(frame, (int(x), int(y)), int(radius),
@@ -274,14 +274,14 @@ class ImageProcessor(Process):
         self.b_streaming = True
 
         while not (self.b_stopping):
-            time.sleep(2)
+            # time.sleep(2)
             # self.send_turn_cmd(turn_left)
-            time.sleep(2)
-            self.send_move_cmd(1)
-            time.sleep(2)
+            # time.sleep(2)
+            # self.send_move_cmd(1)
+            # time.sleep(2)
             # self.send_turn_cmd(turn_right)
-            time.sleep(2)
-            self.send_move_cmd(-1)
+            # time.sleep(2)
+            # self.send_move_cmd(-1)
 
     def stop(self):
         """
