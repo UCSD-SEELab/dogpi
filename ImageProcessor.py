@@ -8,9 +8,9 @@ import imutils
 
 from multiprocessing import Process
 
-turn_right = -20
-turn_left = 20
-forward = 40
+turn_right = 0
+turn_left = 0
+forward = 0
 stop = 0
 direction =''
 
