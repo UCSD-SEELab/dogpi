@@ -118,7 +118,7 @@ class MotorController(Process):
 
         motor.setup()
         motor.setSpeed(20)
-        while (True)
+        while (True):
             self.rx_cmd()
 
         key = cv2.waitKey(1) & 0xFF
