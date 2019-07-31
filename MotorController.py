@@ -121,7 +121,7 @@ class MotorController(Process):
         while (True):
             self.rx_cmd()
 
-        key = cv2.waitKey(1) & 0xFF
+            key = cv2.waitKey(1) & 0xFF
 
             if key == ord("q"):
                 break
