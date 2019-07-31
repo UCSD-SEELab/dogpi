@@ -132,7 +132,7 @@ class ImageProcessor(Process):
             frame = frame[1] if args.get("video", False) else frame
 
             # half = frame.size/2
-            half = (640 / 2)
+            half = (480 / 2)
 
             if frame is None:
                 break
