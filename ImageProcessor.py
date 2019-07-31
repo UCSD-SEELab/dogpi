@@ -132,7 +132,7 @@ class ImageProcessor(Process):
             frame = frame[1] if args.get("video", False) else frame
 
             # half = frame.size/2
-            half = (480 / 2)
+            half = (640 / 2)
 
             if frame is None:
                 break
@@ -184,12 +184,14 @@ class ImageProcessor(Process):
                     # distance = ((size_ball * focal_length) / width_pixels)
                     distance = distance_to_camara(size_ball, focal_length, width_pixels)
 
-                    if distance > 40:
+                    if distance > 50:
                         forward = +10
                         self.send_move_cmd(forward)
+
                     else:
                         stop = 0
                         self.send_move_cmd(stop)
+
 
                     # draw circle and centroid / update list of tracked points
                     cv2.circle(frame, (int(x), int(y)), int(radius),
@@ -201,6 +203,7 @@ class ImageProcessor(Process):
                         turn_left = -20
                         # direction = 'Left'
                         self.send_turn_cmd(turn_left)
+
                     else:
                         turn_right = +20
                         # direction = 'Right'
