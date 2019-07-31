@@ -185,9 +185,11 @@ class ImageProcessor(Process):
                     distance = distance_to_camara(size_ball, focal_length, width_pixels)
 
                     if distance > 40:
-                        forward
+                        forward = +10
+                        send_move_cmd(forward)
                     else:
-                        stop
+                        stop = 0
+                        send_move_cmd(stop)
 
                     # draw circle and centroid / update list of tracked points
                     cv2.circle(frame, (int(x), int(y)), int(radius),
