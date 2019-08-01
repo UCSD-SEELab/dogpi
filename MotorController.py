@@ -114,7 +114,7 @@ class MotorController(Process):
     def run(self):
         """
         desc
-        """
+
         motor.setup()
         motor.setSpeed(20)
         while (True):
@@ -125,6 +125,9 @@ class MotorController(Process):
 
             if key == ord("q"):
                 break
+        """
+
+
 
         # Once the loop is stopped, ensure all motors are off and wheels are turned to center
         self.move(speed=0)
