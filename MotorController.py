@@ -81,7 +81,6 @@ class MotorController(Process):
         # Parse the message
         if 'cmd' in msg_in:
             if (msg_in['cmd'] == 'move') and ('direction' in msg_in):
-                # este speed de donde sale?
                 speed = int(msg_in['direction'])
                 if speed:
                     self.move(speed)
@@ -114,7 +113,6 @@ class MotorController(Process):
     def run(self):
         """
         desc
-        """
 
         motor.setup()
         motor.setSpeed(20)
@@ -126,8 +124,7 @@ class MotorController(Process):
 
             if key == ord("q"):
                 break
-
-
+        """
 
         # Once the loop is stopped, ensure all motors are off and wheels are turned to center
         self.move(speed=0)
