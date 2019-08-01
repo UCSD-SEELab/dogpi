@@ -105,7 +105,7 @@ def forward_with_speed(spd):
     # setSpeed(spd)
     # motor0(forward0)
     # motor1(forward1)
-    print('Moving forward with speed {0}'.format(speed))
+    print('Moving forward with speed {0}'.format(spd))
 
 
 def backward_with_speed(spd=50):
