@@ -63,7 +63,7 @@ class ImageProcessor(Process):
             direction:
         """
         if self.check_conn_valid():
-            msg = {'cmd':'turn', 'dir':direction}
+            msg = {'cmd':'turn', 'direction':direction}
             self.conn_out.send(msg)
             print('ImageProcessor->send_turn_cmd  {0}'.format(msg))
         else:
@@ -276,7 +276,7 @@ class ImageProcessor(Process):
         else:
             vs.release()
 
-        cv2.DestroyAllWindows()
+        cv2.destroyAllWindows()
 
         time.sleep(5)
 
