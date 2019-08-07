@@ -108,7 +108,7 @@ class MotorController(Process):
             GPIO.setupM(pin, GPIO.OUT)  # Set all pins' mode as output
 
     def motor0(x):
-        """
+
         if x == 'True':
             GPIO.output(Motor0_A, GPIO.LOW)
             GPIO.output(Motor0_B, GPIO.HIGH)
@@ -117,23 +117,23 @@ class MotorController(Process):
             GPIO.output(Motor0_B, GPIO.LOW)
         else:
             print('Config Error')
-        """
+
         print('Motor 0- ', 'forward0- ' , forward0)
 
     def motor1(x):
-        """
+
         if x == 'True':
             GPIO.output(Motor1_A, GPIO.LOW)
             GPIO.output(Motor1_B, GPIO.HIGH)
         elif x == 'False':
             GPIO.output(Motor1_A, GPIO.HIGH)
             GPIO.output(Motor1_B, GPIO.LOW)
-        """
+
         print('Motor 1- ', 'forward1- ', forward1)
 
     def __init__(self, conn_in=None):
         """
-        desc
+        Initialize Motor Controller
         """
         super(MotorController, self).__init__()
         self.conn_in = conn_in
@@ -141,7 +141,8 @@ class MotorController(Process):
 
     def set_input_conn(self, conn_in):
         """
-        desc
+        Setup for input connection
+        Assign variable conn_in
         """
         # TODO Check if conn_in is a valid pipe
         self.conn_in = conn_in
@@ -155,7 +156,7 @@ class MotorController(Process):
 
     def move(self, speed):
         """
-        Description of function
+        Movement of the DogPi forward or backwards with constant speed
         """
         print('MotorController: movement set to {0}'.format(speed))
         # It's just going to make it go forward,  no speed
@@ -165,7 +166,7 @@ class MotorController(Process):
 
     def turn(self, angle):
         """
-        Description of function
+        Turning of the DogPi depending on it's position on the frame
         """
         # print('MotorController: wheel angle set to {0}'.format(angle))
         if angle == 'Left':
@@ -176,7 +177,8 @@ class MotorController(Process):
 
     def rx_cmd(self):
         """
-        desc
+        Return comand
+        Receives the messages, parses it and calls action
         """
         # Check if data is available (check at 50 Hz max)
         b_dataready = self.conn_in.poll(timeout=0.02)
@@ -185,7 +187,6 @@ class MotorController(Process):
             return
 
         # Receive message
-        # msg = {'cmd':'move', 'dir':direction}
         msg_in = self.conn_in.recv()
         print('MotorController->rx_cmd  {0}'.format(msg_in))
 
