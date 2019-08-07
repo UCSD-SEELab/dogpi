@@ -217,8 +217,8 @@ class ImageProcessor(Process):
                     cv2.circle(frame, center, 5, (0, 0, 255), -1)
 
                     # angle = (pixels from center * width of ball) / (pixels of ball * distance)
-                    pixels_from_center = (center + radius) - half
-                    angle = (pixels_from_center * size_ball) / (width_pixels * distance)
+                    # pixels_from_center = (center + radius) - half
+                    # angle = (pixels_from_center * size_ball) / (width_pixels * distance)
 
                     """
                     if angle is bigger than x then turn left 
