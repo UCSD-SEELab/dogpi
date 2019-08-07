@@ -221,18 +221,19 @@ class MotorController(Process):
                 self.turn(angle=-45)
 
     def run(self):
+
         """
         desc
         """
             #no estoy segura de que el loop debería de ser así
             # como decirle que pare, cuando va a parar?
             # deberia de agregar una función que diga stop?
-            while(True):
-                self.rx_cmd()
-            if not:
-                # Once the loop is stopped, ensure all motors are off and wheels are turned to center
-                self.move(speed=0)
-                self.turn(angle=0)
+        while(True):
+            self.rx_cmd()
+        if not:
+            # Once the loop is stopped, ensure all motors are off and wheels are turned to center
+            self.move(speed=0)
+            self.turn(angle=0)
 
 
     def stop(self):
