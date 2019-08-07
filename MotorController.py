@@ -118,7 +118,7 @@ class MotorController(Process):
         else:
             print('Config Error')
         """
-        print('Motor 0- ', 'forward0'- , forward0)
+        print('Motor 0- ', 'forward0-' , forward0)
 
     def motor1(x):
         """
