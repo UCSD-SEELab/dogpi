@@ -168,7 +168,7 @@ class MotorController(Process):
         Description of function
         """
         # print('MotorController: wheel angle set to {0}'.format(angle))
-        if angle = 'Left':
+        if angle == 'Left':
             turn_left()
         else:
             turn_right()
