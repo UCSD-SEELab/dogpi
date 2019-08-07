@@ -28,6 +28,8 @@ class ImageProcessor(Process):
     def __init__(self, conn_out=None):
         """
         desc
+        video
+        default buffer
         """
         super(ImageProcessor, self).__init__()
         self.conn_out = conn_out
@@ -61,7 +63,11 @@ class ImageProcessor(Process):
         Send a turn command to the motor control through the pipe to turn DogPi's wheels in a desired direction
         INPUT
             direction:
+        receive angle & direction
+        and send angle and direction
+        if so, then add the angle to the message and  receive it in Motor Controller the right way
         """
+
         if self.check_conn_valid():
             msg = {'cmd':'turn', 'direction':direction}
             self.conn_out.send(msg)
@@ -120,6 +126,7 @@ class ImageProcessor(Process):
 
         # if a video path was not supplied, grab the reference
         # to the webcam
+        # TODO one conne - videoCapture
         if not args.get("video", False):
             vs = VideoStream(src=0).start()
 
@@ -138,27 +145,31 @@ class ImageProcessor(Process):
             # handle the frame from VideoCapture or VideoStream
             frame = frame[1] if args.get("video", False) else frame
 
-            # half = frame.size/2
-            half = (480 / 2)
+            # TODO
+            # half = frame.size[1]/2
+            half = (640 / 2)
 
             if frame is None:
                 break
 
             # resize the frame, blur it, and convert it to the HSV
             # color space
+            # TODO take put resize if frame biggt than x then resize
             frame = imutils.resize(frame, width=600)
+            # identificar bordes de objectos
             blurred = cv2.GaussianBlur(frame, (11, 11), 0)
             hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
 
-            # construct a mask for the color "green", then perform
-            # a series of dilations and erosions to remove any small
-            # blobs left in the mask
+            # TODO out mask before blurred
+            # 1. hsv 2. mask 3. blurred
             mask = cv2.inRange(hsv, greenLower, greenUpper)
+
             mask = cv2.erode(mask, None, iterations=2)
             mask = cv2.dilate(mask, None, iterations=2)
 
             # find contours in the mask and initialize the current
             # (x, y) center of the ball
+            # find contours of blurred version
             cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
                                     cv2.CHAIN_APPROX_SIMPLE)
             cnts = imutils.grab_contours(cnts)
@@ -171,7 +182,7 @@ class ImageProcessor(Process):
                 # largest contour in maks - min enclosing circle and centroid
                 c = max(cnts, key=cv2.contourArea)
                 ((x, y), radius) = cv2.minEnclosingCircle(c)
-
+                # moment for non circular objcts
                 M = cv2.moments(c)
 
                 center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
@@ -205,11 +216,23 @@ class ImageProcessor(Process):
                                (0, 255, 255), 2)
                     cv2.circle(frame, center, 5, (0, 0, 255), -1)
 
-                    # call functions to turn left or right
+                    # angle = (pixels from center * width of ball) / (pixels of ball * distance)
+                    pixels_from_center = (center + radius) - half
+                    angle = (pixels_from_center * size_ball) / (width_pixels * distance)
+
+                    """
+                    if angle is bigger than x then turn left 
+                    else: 
+                    turn right 
+                    """
+
+                    # call functions to turn left or right plus the angle, so maybe it sends both
                     if center[1] >= half:
                         turn_left = -20
-                        # direction = 'Left'
+                        direction = 'Left'
+                        # angle =
                         self.send_turn_cmd(turn_left)
+                        # self.send_turn_cmd(direction)
 
                     else:
                         turn_right = +20

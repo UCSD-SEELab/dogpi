@@ -1,32 +1,135 @@
 import time
-import motor
+import RPi.GPIO as GPIO
+import PCA9685 as p
+import time  
+import PCA9685 as servo
 
 from multiprocessing import Process
 
-"""
-global forward0, forward1, backward1, backward0
-global pwm 
-speed
-motor 0 
-motor 1
+# ===========================================================================
+# Raspberry Pi pin11, 12, 13 and 15 to realize the clockwise/counterclockwise
+# rotation and forward and backward movements
+# ===========================================================================
+Motor0_A = 11  # pin11
+Motor0_B = 12  # pin12
+Motor1_A = 13  # pin13
+Motor1_B = 15  # pin15
 
-with speed spd  
-motor0(forward0)
-motor1(forward1)
+# ======================================    =====================================
+# Set channel 4 and 5 of the servo driver IC to generate PWM, thus
+# controlling the speed of the car
+# ===========================================================================
+EN_M0 = 4  # servo driver IC CH4
+EN_M1 = 5  # servo driver IC CH5
 
-motor0(backward0)
-motor1(backward1)
-
-busnum 
-GPIO.BOARD (physical location)
-
-"""
-
+pins = [Motor0_A, Motor0_B, Motor1_A, Motor1_B]
 
 class MotorController(Process):
     """
     desc
     """
+    # car direction 
+
+    def Map(x, in_min, in_max, out_min, out_max):
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+
+    def setup(busnum=None):
+        global leftPWM, rightPWM, homePWM, pwm
+        leftPWM = 150
+        homePWM = 200
+        rightPWM = 255
+        try:
+            for line in open('config'):
+                if line.startswith('leftPWM'):
+                    leftPWM = int(line.split('='))
+        except:
+            print('config error')
+        if busnum == None:
+            pwm = servo.PWM()  # Initialize the servo controller.
+        else:
+            pwm = servo.PWM(bus_number=busnum)  # Initialize the servo controller.
+        pwm.frequency = 30  # changed from 60 to 30
+
+    def turn_left():
+        global leftPWM
+        #pwm.write(0, 0, leftPWM)
+        print ('Turn Left')# CH0
+
+    def turn_right():
+        global rightPWM
+        #pwm.write(0, 0, rightPWM)
+        print ('Turn Right')
+
+    def home():
+        global homePWM
+        pwm.write(0, 0, homePWM)
+
+    # ===========================================================================
+    # Adjust the duty cycle of the square waves output from channel 4 and 5 of
+    # the servo driver IC, so as to control the speed of the car.
+    # ===========================================================================
+
+    def setSpeed(self, speed):
+        # speed *= 10  # numero entre 0  y 100
+        print('speed is: {0}'.format(speed))
+        pwm.write(EN_M0, 0, speed)
+        pwm.write(EN_M1, 0, speed)
+
+    def setupM(self, busnum=None):
+        global forward0, forward1, backward1, backward0
+        global pwm
+        if busnum == None:
+            pwm = p.PWM()  # Initialize the servo controller.pytho
+        else:
+            pwm = p.PWM(bus_number=busnum)  # Initialize the servo controller.
+
+        pwm.frequency = 60  # 60 times a second is swtiching
+        forward0 = 'True'
+        forward1 = 'True'
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BOARD)  # Number GPIOs by its physical location
+        try:
+            for line in open("config"):
+                if line[0:8] == "forward0":
+                    forward0 = line[11:-1]
+                if line[0:8] == "forward1":
+                    forward1 = line[11:-1]
+        except:
+            pass
+        if forward0 == 'True':
+            backward0 = 'False'
+        elif forward0 == 'False':
+            backward0 = 'True'
+        if forward1 == 'True':
+            backward1 = 'False'
+        elif forward1 == 'False':
+            backward1 = 'True'
+        for pin in pins:
+            GPIO.setupM(pin, GPIO.OUT)  # Set all pins' mode as output
+
+    def motor0(x):
+        """
+        if x == 'True':
+            GPIO.output(Motor0_A, GPIO.LOW)
+            GPIO.output(Motor0_B, GPIO.HIGH)
+        elif x == 'False':
+            GPIO.output(Motor0_A, GPIO.HIGH)
+            GPIO.output(Motor0_B, GPIO.LOW)
+        else:
+            print('Config Error')
+        """
+        print('Motor 0- ', 'forward0'- , forward0)
+
+    def motor1(x):
+        """
+        if x == 'True':
+            GPIO.output(Motor1_A, GPIO.LOW)
+            GPIO.output(Motor1_B, GPIO.HIGH)
+        elif x == 'False':
+            GPIO.output(Motor1_A, GPIO.HIGH)
+            GPIO.output(Motor1_B, GPIO.LOW)
+        """
+        print('Motor 1- ', 'forward1- ', forward1)
 
     def __init__(self, conn_in=None):
         """
@@ -55,13 +158,20 @@ class MotorController(Process):
         Description of function
         """
         print('MotorController: movement set to {0}'.format(speed))
-        motor.forward_with_speed(speed)
+        # It's just going to make it go forward,  no speed
+        # self.setSpeed(speed)
+        motor0(forward0)
+        motor1(forward1)
 
     def turn(self, angle):
         """
         Description of function
         """
-        print('MotorController: wheel angle set to {0}'.format(angle))
+        # print('MotorController: wheel angle set to {0}'.format(angle))
+        if angle = 'Left':
+            turn_left()
+        else:
+            turn_right()
 
 
     def rx_cmd(self):
@@ -95,7 +205,6 @@ class MotorController(Process):
                     print('ERROR: MotorController->rx_cmd  Invalid angle value')
 
 
-            # no entiendo esta parte por que solo hay cmd de move y turn
             elif msg_in['cmd'] == 'stop':
                 self.move(speed=0)
 
@@ -114,27 +223,23 @@ class MotorController(Process):
     def run(self):
         """
         desc
-
-        motor.setup()
-        motor.setSpeed(20)
-        while (True):
-            print('works')
-            # self.rx_cmd()
-
-            key = cv2.waitKey(1) & 0xFF
-
-            if key == ord("q"):
-                break
         """
+            #no estoy segura de que el loop debería de ser así
+            # como decirle que pare, cuando va a parar?
+            # deberia de agregar una función que diga stop?
+            while(True):
+                self.rx_cmd()
+            if not:
+                # Once the loop is stopped, ensure all motors are off and wheels are turned to center
+                self.move(speed=0)
+                self.turn(angle=0)
 
-
-
-        # Once the loop is stopped, ensure all motors are off and wheels are turned to center
-        self.move(speed=0)
-        self.turn(angle=0)
 
     def stop(self):
         """
         Description of function
         """
+        for pin in pins:
+            GPIO.output(pin, GPIO.LOW)
+
         self.b_stopping = True
