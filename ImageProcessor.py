@@ -195,10 +195,6 @@ class ImageProcessor(Process):
             if key == ord("q"):
                 break
 
-        # if we are not using a video file, stop the camera video stream
-        if not args.get("video", False):
-            vs.stop()
-
         # otherwise, release the camera
         else:
             vs.release()
