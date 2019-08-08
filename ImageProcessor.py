@@ -113,7 +113,7 @@ class ImageProcessor(Process):
             frame = vs.read()
             frame = frame[1]
 
-            half = ((frame.shape[1]) / 2)
+            half = ((frame.shape[0]) / 2)
             if frame is None:
                 break
 

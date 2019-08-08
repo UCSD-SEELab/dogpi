@@ -243,6 +243,7 @@ class MotorController(Process):
         self.setup()
 
         while(True):
+
             self.rx_cmd()
             time.sleep(2)
         else:
