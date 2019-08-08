@@ -66,7 +66,7 @@ class MotorController(Process):
             self.pwm = servo.PWM()  # Initialize the servo controller.
         else:
             self.pwm = servo.PWM(bus_number=busnum)  # Initialize the servo controller.
-        self.pwm.frequency = 30  # changed from 60 to 30
+            self.pwm.frequency = 30  # changed from 60 to 30
 
     def turn_left(self):
         self.turn(angle = 30)
@@ -117,7 +117,7 @@ class MotorController(Process):
         elif self.forward1 == 'False':
             backward1 = 'True'
         for pin in pins:
-            GPIO.setupM(pin, GPIO.OUT)  # Set all pins' mode as output
+            GPIO.setup(pin, GPIO.OUT)  # Set all pins' mode as output
 
     def motor0(self,x):
 
@@ -245,7 +245,7 @@ class MotorController(Process):
         """
         self.setupM()
         self.setup()
-        
+
         while(True):
             self.rx_cmd()
         else:
