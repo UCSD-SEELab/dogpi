@@ -28,6 +28,8 @@ class ImageProcessor(Process):
     def __init__(self, conn_out=None):
         """
         desc
+        video
+        default buffer
         """
         super(ImageProcessor, self).__init__()
         self.conn_out = conn_out
@@ -62,6 +64,7 @@ class ImageProcessor(Process):
         INPUT
             direction:
         """
+
         if self.check_conn_valid():
             msg = {'cmd':'turn', 'direction':direction}
             self.conn_out.send(msg)
@@ -73,15 +76,6 @@ class ImageProcessor(Process):
     def send_move_cmd(self, direction):
         """
         Send a move command to the motor control through the pipe to move DogPi forwards, backwards, or stop
-        self.send_move_cmd(forward)
-        self.send_move_cmd(stop)
-        forward = 0
-        stop = 0
-
-        INPUT
-            direction :
-        direction forward +10 / stop 0
-        dir =/ direction in motor controller
         """
         if self.check_conn_valid():
             msg = {'cmd':'move', 'direction':direction}
@@ -96,8 +90,6 @@ class ImageProcessor(Process):
         """
         desc
         """
-
-
         # define the lower and upper boundaries of the "green"
         # ball in the HSV color space
         greenLower = (29, 86, 6)
@@ -110,6 +102,7 @@ class ImageProcessor(Process):
         (dX, dY) = (0, 0)
         direction = ""
 
+
         # vs = cv2.VideoCapture(args["video"])
         vs = cv2.VideoCapture()
         time.sleep(2.0)
@@ -120,14 +113,15 @@ class ImageProcessor(Process):
             frame = vs.read()
 
             half = (frame.size[1] / 2)
-
             if frame is None:
                 break
 
             hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
             # construct a mask for the color "green", then perform
             # a series of dilations and erosions to remove any small
             # blobs left in the mask
+
             mask = cv2.inRange(hsv, greenLower, greenUpper)
             mask = cv2.erode(mask, None, iterations=2)
             mask = cv2.dilate(mask, None, iterations=2)
@@ -138,6 +132,7 @@ class ImageProcessor(Process):
 
             # find contours in the mask and initialize the current
             # (x, y) center of the ball
+            # find contours of blurred version
             cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
                                     cv2.CHAIN_APPROX_SIMPLE)
             cnts = imutils.grab_contours(cnts)
@@ -150,7 +145,7 @@ class ImageProcessor(Process):
                 # largest contour in maks - min enclosing circle and centroid
                 c = max(cnts, key=cv2.contourArea)
                 ((x, y), radius) = cv2.minEnclosingCircle(c)
-
+                # moment for non circular objcts
                 M = cv2.moments(c)
 
                 center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
@@ -190,7 +185,6 @@ class ImageProcessor(Process):
                     degrees = (angle * (180/np.pi))
 
                     self.send_turn_cmd(degrees)
-
 
             # loop over the set of tracked points
             for i in np.arange(1, len(pts)):

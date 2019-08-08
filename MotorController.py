@@ -22,11 +22,13 @@ Motor1_B = 15  # pin15
 EN_M0 = 4  # servo driver IC CH4
 EN_M1 = 5  # servo driver IC CH5
 
+
 pins = [Motor0_A, Motor0_B, Motor1_A, Motor1_B]
 
 
 def Map( x, in_min, in_max, out_min, out_max):
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+
 
 class MotorController(Process):
     """
@@ -35,7 +37,6 @@ class MotorController(Process):
     def __init__(self, conn_in=None):
         """
         Initialize Motor Controller
-        add setup here
         """
         super(MotorController, self).__init__()
         self.conn_in = conn_in
@@ -166,6 +167,7 @@ class MotorController(Process):
         print('MotorController: movement set to {0}'.format(speed))
         # It's just going to make it go forward,  no speed
         # self.setSpeed(speed)
+
         if speed > 0:
             self.motor0(self.forward0)
             self.motor1(self.forward1)
@@ -178,7 +180,11 @@ class MotorController(Process):
         """
         Turning of the DogPi depending on it's position on the frame
         """
-        print('MotorController: wheel angle set to {0}'.format(angle))
+        # print('MotorController: wheel angle set to {0}'.format(angle))
+        if angle == 'Left':
+            turn_left()
+        else:
+            turn_right()
 
         if angle > 15:
             self.pwm.write(0, 0, self.leftPWM)
@@ -191,7 +197,6 @@ class MotorController(Process):
     def rx_cmd(self):
         """
         Receive comand
-        Receives the messages, parses it and calls action
         """
         # Check if data is available (check at 50 Hz max)
         b_dataready = self.conn_in.poll(timeout=0.02)
@@ -239,6 +244,15 @@ class MotorController(Process):
         """
         desc
         """
+            #no estoy segura de que el loop debería de ser así
+            # como decirle que pare, cuando va a parar?
+            # deberia de agregar una función que diga stop?
+        while(True):
+            self.rx_cmd()
+        else:
+            # Once the loop is stopped, ensure all motors are off and wheels are turned to center
+            self.move(speed=0)
+            self.turn(angle=0)
 
         while(True):
             self.rx_cmd()
