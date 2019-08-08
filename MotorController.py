@@ -243,7 +243,9 @@ class MotorController(Process):
         """
         desc
         """
-
+        self.setupM()
+        self.setup()
+        
         while(True):
             self.rx_cmd()
         else:
