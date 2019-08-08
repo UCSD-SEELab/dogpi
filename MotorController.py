@@ -89,7 +89,6 @@ class MotorController(Process):
         self.pwm.write(EN_M1, 0, speed)
 
     def setupM(self, busnum=None):
-        global forward0, forward1, backward1, backward0
 
         if busnum == None:
             self.pwm = p.PWM()  # Initialize the servo controller.pytho
@@ -244,15 +243,6 @@ class MotorController(Process):
         """
         desc
         """
-            #no estoy segura de que el loop debería de ser así
-            # como decirle que pare, cuando va a parar?
-            # deberia de agregar una función que diga stop?
-        while(True):
-            self.rx_cmd()
-        else:
-            # Once the loop is stopped, ensure all motors are off and wheels are turned to center
-            self.move(speed=0)
-            self.turn(angle=0)
 
         while(True):
             self.rx_cmd()
@@ -260,7 +250,6 @@ class MotorController(Process):
             # Once the loop is stopped, ensure all motors are off and wheels are turned to center
             self.move(speed=0)
             self.turn(angle=0)
-
 
     def stop(self):
         """
