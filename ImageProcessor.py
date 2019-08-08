@@ -187,47 +187,6 @@ class ImageProcessor(Process):
 
                     self.send_turn_cmd(degrees)
 
-            # loop over the set of tracked points
-            for i in np.arange(1, len(pts)):
-                #  if tracked points = None then ignore
-                if pts[i - 1] is None or pts[i] is None:
-                    continue
-
-                # check enough points in buffer
-                if counter >= 10 and i == 1 and pts[-10] is not None:
-
-                    # compute the difference between the x and y
-                    # coordinates and re-initialize the direction
-                    # text variables
-                    dX = pts[-10][0] - pts[i][0]
-                    dY = pts[-10][1] - pts[i][1]
-                    (dirX, dirY) = ("", "")
-
-                    # significant movement in x-direction
-                    if np.abs(dX) > 20:
-
-                        if np.sign(dX) == 1:
-                            dirX = "Left"
-
-                        else:
-                            dirX = "Right"
-
-                    # ensure there is significant movement in the
-                    # y-direction
-                    if np.abs(dY) > 20:
-                        dirY = "Up" if np.sign(dY) == 1 else "Down"
-
-                    # handle when both directions are non-empty
-                    if dirX != "" and dirY != "":
-                        direction = "{}-{}".format(dirY, dirX)
-
-                    # otherwise, only one direction is non-empty
-                    else:
-                        direction = dirX if dirX != "" else dirY
-
-                # thickness of the line and draw connecting line
-                thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
-                cv2.line(frame, pts[i - 1], pts[i], (0, 0, 255), thickness)
 
             # if the 'q' key is pressed, stop the loop
             cv2.imshow('Frame', frame)
