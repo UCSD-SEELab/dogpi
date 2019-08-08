@@ -104,7 +104,7 @@ class ImageProcessor(Process):
 
 
         # vs = cv2.VideoCapture(args["video"])
-        vs = cv2.VideoCapture(1)
+        vs = cv2.VideoCapture(0)
         time.sleep(2.0)
 
         # keep looping
