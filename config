@@ -1,0 +1,13 @@
+offset_x = 11
+offset_y = 0
+offset = 0
+forward0 = True
+forward1 = True
+size_ball = 6
+focal_length = 465.95
+known_distance = 40
+greenLower = (29, 86, 6)
+greenUpper = (64, 255, 255)
+leftPWM = 150
+homePWM = 200
+rightPWM = 255

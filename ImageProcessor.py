@@ -97,14 +97,6 @@ class ImageProcessor(Process):
         desc
         """
 
-        # TODO Put in functionality for video streaming and processing here!
-        # construct the argument parse and parse the arguments
-        ap = argparse.ArgumentParser()
-        ap.add_argument("-v", "--video",
-                        help="path to the (optional) video file")
-        ap.add_argument("-b", "--buffer", type=int, default=32,
-                        help="max buffer size")
-        args = vars(ap.parse_args())
 
         # define the lower and upper boundaries of the "green"
         # ball in the HSV color space
@@ -113,21 +105,13 @@ class ImageProcessor(Process):
 
         # initialize the list of tracked points, the frame counter,
         # and the coordinate deltas
-        pts = deque(maxlen=args["buffer"])
+        # pts = deque(maxlen=args["buffer"])
         counter = 0
         (dX, dY) = (0, 0)
         direction = ""
 
-        # if a video path was not supplied, grab the reference
-        # to the webcam
-        if not args.get("video", False):
-            vs = VideoStream(src=0).start()
-
-        # otherwise, grab a reference to the video file
-        else:
-            vs = cv2.VideoCapture(args["video"])
-
-        # allow the camera or video file to warm up
+        # vs = cv2.VideoCapture(args["video"])
+        vs = cv2.VideoCapture()
         time.sleep(2.0)
 
         # keep looping
@@ -135,27 +119,22 @@ class ImageProcessor(Process):
             # grab the current frame
             frame = vs.read()
 
-            # handle the frame from VideoCapture or VideoStream
-            frame = frame[1] if args.get("video", False) else frame
-
-            # half = frame.size/2
-            half = (480 / 2)
+            half = (frame.size[1] / 2)
 
             if frame is None:
                 break
 
-            # resize the frame, blur it, and convert it to the HSV
-            # color space
-            frame = imutils.resize(frame, width=600)
-            blurred = cv2.GaussianBlur(frame, (11, 11), 0)
-            hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
-
+            hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
             # construct a mask for the color "green", then perform
             # a series of dilations and erosions to remove any small
             # blobs left in the mask
             mask = cv2.inRange(hsv, greenLower, greenUpper)
             mask = cv2.erode(mask, None, iterations=2)
             mask = cv2.dilate(mask, None, iterations=2)
+
+            # resize the frame, blur it
+            mask = imutils.resize(mask, width=600)
+            blurred = cv2.GaussianBlur(mask, (11, 11), 0)
 
             # find contours in the mask and initialize the current
             # (x, y) center of the ball
@@ -205,19 +184,13 @@ class ImageProcessor(Process):
                                (0, 255, 255), 2)
                     cv2.circle(frame, center, 5, (0, 0, 255), -1)
 
-                    # call functions to turn left or right
-                    if center[1] >= half:
-                        turn_left = -20
-                        # direction = 'Left'
-                        self.send_turn_cmd(turn_left)
+                    pixels_from_center = half - center[1]
+                    angle = np.arctan((pixels_from_center * size_ball) / (width_pixels * distance))
 
-                    else:
-                        turn_right = +20
-                        # direction = 'Right'
-                        self.send_turn_cmd(turn_right)
+                    degrees = (angle * (180/np.pi))
 
-            # else:
-            # stop()
+                    self.send_turn_cmd(degrees)
+
 
             # loop over the set of tracked points
             for i in np.arange(1, len(pts)):
