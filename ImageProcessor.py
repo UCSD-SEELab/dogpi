@@ -111,6 +111,7 @@ class ImageProcessor(Process):
         while True:
             # grab the current frame
             frame = vs.read()
+            frame = frame[1]
 
             dimensions = frame.shape
             width = frame.shape[1]
