@@ -180,7 +180,7 @@ class ImageProcessor(Process):
                                (0, 255, 255), 2)
                     cv2.circle(frame, center, 5, (0, 0, 255), -1)
 
-                    pixels_from_center = half - center[1]
+                    pixels_from_center = half - center[0]
                     angle = np.arctan((pixels_from_center * size_ball) / (width_pixels * distance))
 
                     degrees = (angle * (180/np.pi))
