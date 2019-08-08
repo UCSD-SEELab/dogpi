@@ -179,11 +179,7 @@ class MotorController(Process):
         """
         Turning of the DogPi depending on it's position on the frame
         """
-        # print('MotorController: wheel angle set to {0}'.format(angle))
-        if angle == 'Left':
-            turn_left()
-        else:
-            turn_right()
+        print('MotorController: wheel angle set to {0}'.format(angle))
 
         if angle > 15:
             self.pwm.write(0, 0, self.leftPWM)
