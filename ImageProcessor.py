@@ -111,7 +111,6 @@ class ImageProcessor(Process):
         while True:
             # grab the current frame
             frame = vs.read()
-            frame = frame[1]
 
             half = ((frame.shape[1]) / 2)
             if frame is None:
