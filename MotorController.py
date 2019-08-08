@@ -244,6 +244,7 @@ class MotorController(Process):
 
         while(True):
             self.rx_cmd()
+            time.sleep(2)
         else:
             # Once the loop is stopped, ensure all motors are off and wheels are turned to center
             self.move(speed=0)
